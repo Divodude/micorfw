@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include requirements.txt
+recursive-include assets *.png *.jpg *.jpeg
+recursive-include microfw *.py
+recursive-include docs *.md

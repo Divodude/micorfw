@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "microfw"
+version = "0.1.0"
+description = "A lightweight, high-performance asynchronous Python micro-framework for building modern microservices and web applications"
+readme = "README.md"
+authors = [
+  { name="Divyansh Yadav", email="liveg6740@gmail.com" },
+]
+license = { text = "MIT" }
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Framework :: AsyncIO",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+    "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Operating System :: OS Independent",
+]
+keywords = [
+    "microframework",
+    "async",
+    "asgi",
+    "microservices",
+    "web-framework",
+    "fastapi-alternative",
+    "lightweight",
+    "sqlalchemy",
+    "middleware",
+    "rest-api",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "sqlalchemy>=1.4.0",
+    "aiosqlite>=0.17.0",
+    "uvicorn>=0.15.0",
+    "pydantic>=1.8.0",
+    "httpx>=0.23.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Divodude/micorfw"
+"Bug Tracker" = "https://github.com/Divodude/micorfw/issues"
+"Documentation" = "https://github.com/Divodude/micorfw#readme"
+"Source Code" = "https://github.com/Divodude/micorfw"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["microfw*"]

@@ -1,0 +1,5 @@
+sqlalchemy
+aiosqlite
+uvicorn
+pydantic
+httpx
