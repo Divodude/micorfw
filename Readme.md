@@ -369,7 +369,7 @@ This project was built with inspiration and knowledge from various excellent res
 - **[Django](https://www.djangoproject.com/)** - High-level Python web framework
 - **[Stack Overflow](https://stackoverflow.com/)** - Community-driven Q&A platform
 - **[GeeksforGeeks](https://www.geeksforgeeks.org/)** - Programming tutorials and resources
-- **[Google Antigravity AI](https://deepmind.google/technologies/gemini/)** - AI-assisted development
+
 
 Special thanks to the open-source community for their continuous support and contributions.
 
@@ -377,4 +377,4 @@ Special thanks to the open-source community for their continuous support and con
 
 If you find this project helpful, consider supporting its development:
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow.svg)](https://www.buymeacoffee.com/yourusername)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow.svg)](https://www.buymeacoffee.com/divodude)
