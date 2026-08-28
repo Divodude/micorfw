@@ -39,10 +39,7 @@ class App:
             for method in methods:
                 # Check for path parameters, e.g., /users/{id}
                 if '{' in path and '}' in path:
-                    # Convert /users/{id} to ^/users/(?P<id>[^/]+)$
-                    # Escape the path first, then replace \{(\w+)\} with (?P<\1>[^/]+)
-                    # Note: We need to handle slashes correctly.
-                    # Simple approach: replace {var} with (?P<var>[^/]+)
+
                     regex_path = "^" + path + "$"
                     regex_path = re.sub(r'\{(\w+)\}', r'(?P<\1>[^/]+)', regex_path)
                     
@@ -61,6 +58,7 @@ class App:
     def middleware(self, func):
         self.middlewares.append(func)
         return func
+
 
 
     async def dispatch(self, request):
@@ -109,7 +107,6 @@ class App:
                 # Look for a parameter annotated with a subclass of BaseModel
                 for name, param in sig.parameters.items():
                     if isinstance(param.annotation, type) and issubclass(param.annotation, BaseModel):
-                        # Found a model! Parse body.
                         try:
                             body_data = await req.json()
                             model_instance = param.annotation(**body_data)

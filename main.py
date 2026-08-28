@@ -56,7 +56,6 @@ async def create_item(request):
     if request.method == "GET":
         result = await request.db.execute(select(Item))
         items = result.scalars().all()
-        # Serialize list of objects to list of dicts
         data = [{"id": i.id, "name": i.name} for i in items]
         return Response(data, status_code=200)
 
@@ -73,7 +72,6 @@ async def create_item(request):
         await request.db.refresh(new_item)
         return Response({"id": new_item.id, "name": new_item.name}, status_code=201)
 
-# READ
 @app.route("/items/{id}")
 async def get_item(request, id):
     result = await request.db.execute(select(Item).where(Item.id == int(id)))
@@ -82,7 +80,7 @@ async def get_item(request, id):
         return Response(item.name)
     return Response("Not Found", status_code=404)
 
-# UPDATE
+
 @app.route("/items/{id}/update", methods=["POST"])
 async def update_item(request, id):
     new_name = request.body.decode().strip()
