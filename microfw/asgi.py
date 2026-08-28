@@ -42,9 +42,12 @@ class ASGI:
             await self._handle_http(scope, receive, send)
 
     async def _handle_http(self, scope, receive, send):
-        event = await receive()
-
-        body = event.get("body", b"")
+        body = b""
+        more_body = True
+        while more_body:
+            message = await receive()
+            body += message.get("body", b"")
+            more_body = message.get("more_body", False)
 
         request = Request(
             method=scope["method"],

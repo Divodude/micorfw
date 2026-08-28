@@ -1,5 +1,6 @@
 import httpx
 import time
+import asyncio
 from typing import Any, Optional, Dict
 from .context import RequestContext
 from .service_registry import ServiceRegistry
@@ -35,26 +36,37 @@ class ServiceClient:
 
         # 4. Observability Hook (Start)
         start_time = time.time()
+        
+        max_retries = kwargs.pop("max_retries", 3)
+        base_backoff = kwargs.pop("base_backoff", 0.5)
 
         try:
-            async with httpx.AsyncClient(timeout=timeout) as client:
-                response = await client.request(method, url, **kwargs)
-                
-                # 5. Error Handling Rules
-                # 5xx -> Exception
-                if response.status_code >= 500:
-                    raise HTTPException(status_code=502, detail=f"Upstream service '{service}' failed with {response.status_code}")
-                
-                # Connection Error is handled by httpx block except
-                
-                # 4xx -> Return Response (User Logic should handle)
-                # But strict checking might want to verify JSON
-                return response
+            for attempt in range(max_retries + 1):
+                try:
+                    async with httpx.AsyncClient(timeout=timeout) as client:
+                        response = await client.request(method, url, **kwargs)
+                        
+                        # 5. Error Handling Rules
+                        if response.status_code >= 500:
+                            if response.status_code in (502, 503, 504) and attempt < max_retries:
+                                # Transient error, allow retry loop to continue
+                                pass
+                            else:
+                                raise HTTPException(status_code=502, detail=f"Upstream service '{service}' failed with {response.status_code}")
+                        else:
+                            return response
 
-        except httpx.TimeoutException:
-             raise HTTPException(status_code=504, detail=f"Upstream service '{service}' timed out")
-        except httpx.RequestError as e:
-             raise HTTPException(status_code=502, detail=f"Connection to '{service}' failed: {str(e)}")
+                except (httpx.TimeoutException, httpx.RequestError) as e:
+                     if attempt == max_retries:
+                         if isinstance(e, httpx.TimeoutException):
+                             raise HTTPException(status_code=504, detail=f"Upstream service '{service}' timed out")
+                         else:
+                             raise HTTPException(status_code=502, detail=f"Connection to '{service}' failed: {str(e)}")
+                
+                # Backoff before next attempt
+                if attempt < max_retries:
+                    await asyncio.sleep(base_backoff * (2 ** attempt))
+
         finally:
             # Observability Hook (End)
             duration = time.time() - start_time
